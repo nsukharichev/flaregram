@@ -4,8 +4,8 @@
 import { app } from './flaregram/client.js';
 import { bot } from './flaregram/bot.js';
 
-// Keep Telegram replies in plain-text mode, so ASCII art and punctuation
-// do not get parsed as Markdown by the framework's default sendMessage API.
+// Use Telegram's supported HTML mode for these unformatted messages.
+// That avoids the framework's Markdown default mangling backslashes/underscores in ASCII art.
 function onCommand(command, makeText) {
   app.on_message(command, (update, ctx) => {
     const chatId = update.message?.chat?.id;
@@ -14,7 +14,7 @@ function onCommand(command, makeText) {
     ctx.waitUntil(bot.message.sendMessage({
       chat_id: chatId,
       text,
-      parse_mode: '',
+      parse_mode: 'HTML',
     }));
   });
 }
