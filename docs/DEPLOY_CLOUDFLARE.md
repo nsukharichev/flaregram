@@ -74,7 +74,7 @@ Edit src/deploy.js to customize the bot.
 
 The commands use existing Worker bindings and the Telegram API only;
 no storage, scheduled jobs, or paid services are needed. Replies are
-plain text so Telegram's Markdown parser cannot alter the ASCII art.
+sent without Markdown formatting so the parser cannot alter ASCII art.
 They can be invoked by typing the slash command directly in Telegram.
 To display them in Telegram's command picker, send /setcommands to
 @BotFather and provide the commands and descriptions.
