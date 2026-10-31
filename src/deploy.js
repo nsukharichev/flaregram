@@ -4,23 +4,49 @@
 import { app } from './flaregram/client.js';
 import { bot } from './flaregram/bot.js';
 
-app.on_message('/start', (update, ctx) => {
-  const chatId = update.message?.chat?.id;
-  if (chatId == null) return;
-  ctx.waitUntil(bot.message.sendMessage({
-    chat_id: chatId,
-    text: 'Flaregram is online. Send /help to see available commands.',
-  }));
-});
+// Keep Telegram replies in plain-text mode, so ASCII art and punctuation
+// do not get parsed as Markdown by the framework's default sendMessage API.
+function onCommand(command, makeText) {
+  app.on_message(command, (update, ctx) => {
+    const chatId = update.message?.chat?.id;
+    if (chatId == null) return;
+    const text = typeof makeText === 'function' ? makeText(update) : makeText;
+    ctx.waitUntil(bot.message.sendMessage({
+      chat_id: chatId,
+      text,
+      parse_mode: '',
+    }));
+  });
+}
 
-app.on_message('/help', (update, ctx) => {
-  const chatId = update.message?.chat?.id;
-  if (chatId == null) return;
-  ctx.waitUntil(bot.message.sendMessage({
-    chat_id: chatId,
-    text: 'Commands: /start, /help',
-  }));
-});
+const HELP_TEXT = [
+  'Flaregram commands:',
+  '/start — Welcome message',
+  '/help — List all commands',
+  '/ping — Check if the bot is online',
+  '/about — About this bot',
+  '/dice — Roll a six-sided die',
+  '/coin — Flip a coin',
+  '/id — Show this chat ID',
+  '/dog — Show an ASCII dog',
+].join('\n');
+
+const DOG_ART = [
+  ' / \\__',
+  '(    @\\___',
+  ' /         O',
+  '/   (_____/',
+  '/_____/   U',
+].join('\n');
+
+onCommand('/start', 'Flaregram is online. Send /help to see available commands.');
+onCommand('/help', HELP_TEXT);
+onCommand('/ping', '🏓 Pong! Flaregram is online.');
+onCommand('/about', 'Flaregram is a lightweight Telegram bot running on Cloudflare Workers.');
+onCommand('/dice', () => '🎲 You rolled ' + (Math.floor(Math.random() * 6) + 1) + '.');
+onCommand('/coin', () => '🪙 ' + (Math.random() < 0.5 ? 'Heads' : 'Tails') + '!');
+onCommand('/id', (update) => 'This chat ID: ' + update.message.chat.id);
+onCommand('/dog', DOG_ART);
 
 export default {
   fetch(request, env, ctx) {
