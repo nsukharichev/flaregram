@@ -1,4 +1,4 @@
-# Deployment-specific configuration; the library's original wrangler.toml is unchanged.
+# Deployment-specific config; original wrangler.toml stays unchanged.
 # Run: npx wrangler deploy --config wrangler.deploy.toml
 name = "flaregram"
 main = "src/deploy.js"
@@ -9,7 +9,6 @@ workers_dev = true
 [vars]
 DROP_PENDING_UPDATES = "False"
 
-# A strict per-request budget keeps this compatible with Workers Free.
-[limits]
-cpu_ms = 10
-subrequests = 5
+# No paid bindings (KV, R2, D1, Durable Objects, etc.).
+# Workers Free automatically enforces 100,000 requests/day (account-wide)
+# and 10 ms CPU/request; explicit CPU limits require a paid plan.
