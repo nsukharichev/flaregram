@@ -25,7 +25,7 @@ async function runCommand(command, chatId = 123456789) {
 
   assert.equal(messages.length, 1, 'command should send one reply');
   assert.equal(messages[0].chat_id, chatId);
-  assert.equal(messages[0].parse_mode, '', 'replies must be plain text');
+  assert.equal(messages[0].parse_mode, 'HTML', 'replies must avoid Markdown parsing');
   return messages[0].text;
 }
 
