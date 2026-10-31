@@ -57,6 +57,28 @@ npm run flaregram -- webhook info
 The command registers `/bot` automatically. Keep your bot token and
 secret private. Do not commit `.dev.vars`.
 
+## Starter bot commands
+
+Edit src/deploy.js to customize the bot.
+
+| Command | Behavior |
+| --- | --- |
+| /start | Welcome message |
+| /help | List all commands |
+| /ping | Reply with an online-status ping |
+| /about | Describe Flaregram |
+| /dice | Roll a random integer from 1 to 6 |
+| /coin | Randomly select Heads or Tails |
+| /id | Show the current Telegram chat ID |
+| /dog | Show an ASCII dog |
+
+The commands use existing Worker bindings and the Telegram API only;
+no storage, scheduled jobs, or paid services are needed. Replies are
+plain text so Telegram's Markdown parser cannot alter the ASCII art.
+They can be invoked by typing the slash command directly in Telegram.
+To display them in Telegram's command picker, send /setcommands to
+@BotFather and provide the commands and descriptions.
+
 ## Safety
 
 Until **both** Worker secrets are configured, `POST /bot` returns 503.
